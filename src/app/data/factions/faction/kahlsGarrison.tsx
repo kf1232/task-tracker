@@ -7,7 +7,14 @@ const KAHLS_GARRISON = new FactionObject(
     5,
     false,
     [],
-    []
+    [],
+    {
+        [1]:  '/images/factionImages/kahlsGarrison/1.webp',
+        [2]:  '/images/factionImages/kahlsGarrison/1.webp',
+        [3]:  '/images/factionImages/kahlsGarrison/1.webp',
+        [4]:  '/images/factionImages/kahlsGarrison/1.webp',
+        [5]:  '/images/factionImages/kahlsGarrison/1.webp',
+    }
 );
 
 export default KAHLS_GARRISON;

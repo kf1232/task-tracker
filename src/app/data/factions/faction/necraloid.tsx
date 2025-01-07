@@ -4,10 +4,15 @@ const NECRALOID = new FactionObject(
     'Necraloid',
     'necraloid',
     1,
-    5,
+    3,
     false,
     [],
-    []
+    [],
+    {
+        [1]:  '/images/factionImages/necraloid/1.webp',
+        [2]:  '/images/factionImages/necraloid/2.webp',
+        [3]:  '/images/factionImages/necraloid/3.webp'
+    }
 );
 
 export default NECRALOID;

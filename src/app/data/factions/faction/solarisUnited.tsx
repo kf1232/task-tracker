@@ -7,7 +7,14 @@ const SOLARIS_UNITED = new FactionObject(
     5,
     false,
     [],
-    []
+    [],
+    {
+        [1]:  '/images/factionImages/solarisUnited/1.webp',
+        [2]:  '/images/factionImages/solarisUnited/2.webp',
+        [3]:  '/images/factionImages/solarisUnited/3.webp',
+        [4]:  '/images/factionImages/solarisUnited/4.webp',
+        [5]:  '/images/factionImages/solarisUnited/5.webp',
+    }
 );
 
 export default SOLARIS_UNITED;

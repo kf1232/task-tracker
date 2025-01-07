@@ -7,7 +7,10 @@ const CEPHALON_SIMARIS = new FactionObject(
     1,
     false,
     [],
-    []
+    [],
+    {
+        [1]:  '/images/factionImages/cephalonSimaris/1.webp'
+    }
 );
 
 export default CEPHALON_SIMARIS;
