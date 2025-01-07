@@ -3,7 +3,7 @@ import FactionObject from '@/app/data/factions/FactionObject';
 import LowerFactionButton from '@/app/tasks/settings/buttonLowerFactionRank';
 import RaiseRankButton from '@/app/tasks/settings/buttonRaiseFactionRank';
 import PledgeFactionButton from '@/app/tasks/settings/buttonPledgeFaction';
-import '@/styles/custom.css'
+import '@/styles/custom.css';
 
 interface FactionCardProps {
     faction: FactionObject;
@@ -47,7 +47,8 @@ const FactionCard: React.FC<FactionCardProps> = ({
                 <span className="text-sm text-primary">Rank: {currentRank}</span>
             </div>
 
-            <div className="relative w-full h-2 bg-gray-700 rounded-full overflow-hidden mb-4">
+            {/* Progress Bar with Black Outline */}
+            <div className="relative w-full h-2 bg-gray-700 rounded-full overflow-hidden mb-4 border border-black">
                 <div
                     className={`absolute top-0 left-0 h-full transition-all duration-300 ${progressBarClass}`}
                     style={{
