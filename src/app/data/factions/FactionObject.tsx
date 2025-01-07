@@ -6,6 +6,7 @@ export default class FactionObject {
     canPledge: boolean;
     allied: string[];
     opposed: string[];
+    imagePaths?: { [rank: number]: string };
 
     constructor(
         name: string,
@@ -15,6 +16,7 @@ export default class FactionObject {
         canPledge: boolean,
         allied: string[],
         opposed: string[],
+        imagePaths?: { [rank: number]: string }
     ) {
         this.name = name;
         this.key = key;
@@ -23,13 +25,27 @@ export default class FactionObject {
         this.canPledge = canPledge;
         this.allied = allied;
         this.opposed = opposed;
+        this.imagePaths = imagePaths;
     }
 
-    getStatus(pledge: FactionObject): string {
-        if (!pledge) return 'p4 rounded border bg-gray-100 border-gray-300'
-        if (pledge.key === this.key) return 'p4 rounded border bg-green-200 border-green-300'
-        if (pledge.allied.includes(this.key)) return 'p4 rounded border bg-green-200 border-green-300'
-        if (pledge.opposed.includes(this.key)) return 'p4 rounded border bg-red-200 border-red-300'
-        return 'p4 rounded border bg-gray-200 border-gray-300'
+    getImagePath(currentRank: number): string {
+        if (!this.imagePaths) return '';
+        return this.imagePaths[currentRank] || '';
+    }
+
+    getBorderClass(pledge: FactionObject | null): string {
+        if (!pledge) return 'border-gray-100';
+        if (pledge.key === this.key) return 'border-green-500';
+        if (pledge.allied.includes(this.key)) return 'border-green-500';
+        if (pledge.opposed.includes(this.key)) return 'border-red-500';
+        return 'border-gray-100';
+    }
+
+    getProgressBarClass(pledge: FactionObject | null): string {
+        if (!pledge) return 'bg-gray-100';
+        if (pledge.key === this.key) return 'bg-green-500';
+        if (pledge.allied.includes(this.key)) return 'bg-green-500';
+        if (pledge.opposed.includes(this.key)) return 'bg-red-500';
+        return 'bg-gray-100';
     }
 }

@@ -3,28 +3,30 @@
 import { useState, useEffect } from 'react';
 import FactionObject from '@/app/data/factions/FactionObject';
 import FACTION_LIST from '@/app/data/factions/factionList';
-import LowerFactionButton from './buttonLowerFactionRank';
-import RaiseRankButton from './buttonRaiseFactionRank';
-import PledgeFactionButton from './buttonPledgeFaction';
+import FACTION_SYNDICATES from '@/app/data/factions/factionSyndicates';
+import FactionCard from './factionCard';
 
 export default function Settings() {
-    function getDefaultRanks(factions: FactionObject[]): Record<string, number> {
-        return factions.reduce((acc, faction) => {
+    const getDefaultRanks = (factions: FactionObject[]): Record<string, number> =>
+        factions.reduce((acc: Record<string, number>, faction) => {
             acc[faction.key] = faction.minRank;
-            return acc
-        }, {} as Record<string,number>);
-    }
+            return acc;
+        }, {});
+    
 
     const [pledge, setPledge] = useState<FactionObject | null>(null);
-    const [ranks, setRanks] = useState<{ [key: string]: number }>(getDefaultRanks(FACTION_LIST));
+    const [ranks, setRanks] = useState<Record<string, number>>(getDefaultRanks(FACTION_LIST));
 
     useEffect(() => {
         const storedData = localStorage.getItem('factionData');
         if (storedData) {
-            const parsedData = JSON.parse(storedData);
-            console.log(parsedData)
-            setRanks(parsedData.ranks || ranks);
-            setPledge(parsedData.pledge || pledge);
+            try {
+                const parsedData = JSON.parse(storedData);
+                setRanks(parsedData.ranks || ranks);
+                setPledge(parsedData.pledge || pledge);
+            } catch (error) {
+                console.error('Error parsing faction data:', error);
+            }
         }
     }, []);
 
@@ -36,30 +38,40 @@ export default function Settings() {
         setRanks((prev) => ({
             ...prev,
             [key]: Math.min(max, Math.max(min, value)),
-        }))
+        }));
     };
 
     const handlePledgeChange = (faction: FactionObject) => {
         setPledge(faction);
-    }
+    };
 
     return (
-        <div className='p-4'>
-            <h1 className='text-2x1 font-bold mb-4'> Faction Settings </h1>
-            <div className='space-y-4'>
+        <div className="bg-dark min-h-screen p-6 text-secondary">
+            <h1 className="text-4xl font-bold text-primary mb-6">Faction Settings</h1>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {FACTION_SYNDICATES.map((faction) => (
+                    <FactionCard
+                        key={faction.key}
+                        faction={faction}
+                        ranks={ranks}
+                        pledge={pledge}
+                        handleRankChange={handleRankChange}
+                        handlePledgeChange={handlePledgeChange}
+                    />
+                ))}
+            </div>
+            <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {FACTION_LIST.map((faction) => (
-                    <div key={faction.key}
-                        className={faction.getStatus(pledge)}>
-                        <span className='w-40'>{faction.name} : {ranks[faction.key] ? ranks[faction.key] : 0}</span>
-
-                        {LowerFactionButton(faction, ranks, handleRankChange)}
-
-                        {RaiseRankButton(faction, ranks, handleRankChange)}
-
-                        {PledgeFactionButton(faction, pledge, handlePledgeChange)}
-                    </div>
+                    <FactionCard
+                        key={faction.key}
+                        faction={faction}
+                        ranks={ranks}
+                        pledge={pledge}
+                        handleRankChange={handleRankChange}
+                        handlePledgeChange={handlePledgeChange}
+                    />
                 ))}
             </div>
         </div>
-    )
+    );
 }
