@@ -1,37 +1,41 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Cookies from 'js-cookie';
 import FactionObject from '@/app/data/factions/FactionObject';
 import FACTION_LIST from '@/app/data/factions/factionList';
 import FACTION_SYNDICATES from '@/app/data/factions/factionSyndicates';
 import FactionCard from './factionCard';
 
 export default function Settings() {
+    const COOKIE_NAME = 'factionData';
+    const COOKIE_EXPIRATION_DAYS = 365;
+
     const getDefaultRanks = (factions: FactionObject[]): Record<string, number> =>
         factions.reduce((acc: Record<string, number>, faction) => {
             acc[faction.key] = faction.minRank;
             return acc;
         }, {});
-    
 
     const [pledge, setPledge] = useState<FactionObject | null>(null);
     const [ranks, setRanks] = useState<Record<string, number>>(getDefaultRanks(FACTION_LIST));
 
     useEffect(() => {
-        const storedData = localStorage.getItem('factionData');
+        const storedData = Cookies.get(COOKIE_NAME);
         if (storedData) {
             try {
                 const parsedData = JSON.parse(storedData);
                 setRanks(parsedData.ranks || ranks);
                 setPledge(parsedData.pledge || pledge);
             } catch (error) {
-                console.error('Error parsing faction data:', error);
+                console.error('Error parsing faction data from cookies:', error);
             }
         }
     }, []);
 
     useEffect(() => {
-        localStorage.setItem('factionData', JSON.stringify({ ranks, pledge }));
+        const cookieData = JSON.stringify({ ranks, pledge });
+        Cookies.set(COOKIE_NAME, cookieData, { expires: COOKIE_EXPIRATION_DAYS });
     }, [ranks, pledge]);
 
     const handleRankChange = (key: string, value: number, min: number, max: number) => {
